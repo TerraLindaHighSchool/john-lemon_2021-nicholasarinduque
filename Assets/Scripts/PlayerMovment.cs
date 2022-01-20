@@ -2,40 +2,51 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovment : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     private Animator animator;
-    private Rigidbody rd;
+    private Rigidbody rb;
     private Vector3 moveDirection;
-    private Quaternion rotaion;
+    private Quaternion rotation;
     private bool isWalking;
 
-    [SerializeField] private float turnSpeed = 20f; 
+    [SerializeField] private float turnSpeed = 20f;
 
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-        rotaion = Quaternion.identity;
+        rotation = Quaternion.identity;
     }
 
-    // Update is called once per frame
-
-    //Get user input to set direction player will move
-    float horizontal = Input.GetAxis("Horizontal");
-    float vertical = Input.GetAxis("Vertical");
-    //Set animatorto walking or idle depending on user input
-    isWalking = !(Mathf.Approximately(horizontal, 0f) && Mathf.Approximaly(vertical, 0f)
-    //Assign rotation towards move direction 
+    // Update is called once per frame 
     void FixedUpdate()
     {
+        // Get user input
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
 
+        // Use user input to set direction player will move
+        moveDirection.Set(horizontal, 0f, vertical);
+        moveDirection.Normalize();
+
+        // Set animator to walking or idle depending on user input
+        isWalking = !(Mathf.Approximately(horizontal) && Mathf.Approximately(vertical, 0f));
+        // Assign roation towards move direction 
     }
 
+    // Animator event
     private void OnAnimatorMove()
     {
-
+        
     }
+
+
+
+
+
+
+
 
 }
