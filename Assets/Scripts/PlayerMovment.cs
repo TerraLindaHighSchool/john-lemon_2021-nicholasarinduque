@@ -32,14 +32,19 @@ public class PlayerMovement : MonoBehaviour
         moveDirection.Normalize();
 
         // Set animator to walking or idle depending on user input
-        isWalking = !(Mathf.Approximately(horizontal) && Mathf.Approximately(vertical, 0f));
+        isWalking = !(Mathf.Approximately(horizontal, 0f)) && Mathf.Approximately(vertical, 0f);
+        animator.SetBool("Iswalking", isWalking);
         // Assign roation towards move direction 
+        Vector3 desiredDirection = Vector3.RotateTowards(transform.forward, moveDirection,
+            turnSpeed * Time.deltaTime, 0f);
+        rotation = Quaternion.LookRotation(desiredDirection);
     }
 
     // Animator event
     private void OnAnimatorMove()
     {
-        
+        rb.MovePosition(rb.position + moveDirection * animator.deltaPosition.magnitude);
+        rb.MoveRotation(rotation);
     }
 
 
