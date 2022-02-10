@@ -5,17 +5,19 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private Animator animator;
+    private Animator m_Animator;
     private Rigidbody rb;
     private Vector3 moveDirection;
     private Quaternion rotation;
     private bool isWalking;
+    
 
     [SerializeField] private float turnSpeed = 20f;
 
     // Start is called before the first frame update
     void Start()
     {
-        animator = GetComponent<Animator>();
+        m_Animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         rotation = Quaternion.identity;
     }
@@ -32,8 +34,11 @@ public class PlayerMovement : MonoBehaviour
         moveDirection.Normalize();
 
         // Set animator to walking or idle depending on user input
-        isWalking = !(Mathf.Approximately(horizontal, 0f)) && Mathf.Approximately(vertical, 0f);
-        animator.SetBool("Iswalking", isWalking);
+
+        bool hasHorizontalInput = !Mathf.Approximately(horizontal, 0f);
+        bool hasVerticalInput = !Mathf.Approximately(vertical, 0f);
+        bool isWalking = hasHorizontalInput || hasVerticalInput;
+        m_Animator.SetBool("IsWalking", isWalking);
         // Assign roation towards move direction 
         Vector3 desiredDirection = Vector3.RotateTowards(transform.forward, moveDirection,
             turnSpeed * Time.deltaTime, 0f);
